@@ -10,14 +10,36 @@ public class GameWindow extends JFrame {
     GameCanvas gameCanvas;
     long lastTime = 0;
 
-    public GameWindow(){
+    public GameWindow() {
+
+//        Cai dat kich thuoc cua so nhin thay
         this.setSize(1024, 600);
+
+//        Khai bao ham setup gamecanvas
+        this.setupGameCanvas();
+
+//       Goi ham event
+        this.event();
+
+//        Set hien thi
+        this.setVisible(true);
+    }
+
+    private void setupGameCanvas() {
+
 //        Khoi tao doi tuong giay ve
         this.gameCanvas = new GameCanvas();
+
 //Dua gamecanvas vao window
         this.add(this.gameCanvas);
 
+    }
+
+    //    Khai bao ham keyboardEvent
+    private void keyboardEvent() {
+
         this.addKeyListener(new KeyListener() {
+
             @Override
             public void keyTyped(KeyEvent e) {
                 System.out.println("keyTyped");
@@ -26,53 +48,74 @@ public class GameWindow extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
 
-                if (e.getKeyCode()==KeyEvent.VK_LEFT){
-                    gameCanvas.positionXPlayer -=3;
+                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    gameCanvas.positionXPlayer -= 3;
                 }
 
-                if (e.getKeyCode()==KeyEvent.VK_RIGHT){
-                    gameCanvas.positionXPlayer +=3;
+                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    gameCanvas.positionXPlayer += 3;
                 }
 
-                if (e.getKeyCode()==KeyEvent.VK_UP){
-                    gameCanvas.positionYPlayer -=3;
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    gameCanvas.positionYPlayer -= 3;
                 }
 
-                if (e.getKeyCode()==KeyEvent.VK_DOWN){
-                    gameCanvas.positionYPlayer +=3;
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    gameCanvas.positionYPlayer += 3;
                 }
 
             }
+
             @Override
             public void keyReleased(KeyEvent e) {
                 System.out.println("keyTyped");
 
             }
         });
-
-//        Tat cua so va dong chuong trinh
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                System.exit(1);
-            }
-        });
-
-//        Set hien thi
-        this.setVisible(true);
     }
 
-    public void gameLoop(){
-        while (true){
+    //    Khai Bao ham windowEvent
+    private void windowEvent() {
+
+        //        Tat cua so va dong chuong trinh
+        this.addWindowListener(new WindowAdapter() {
+
+            @Override
+
+            public void windowClosing(WindowEvent e) {
+
+                System.exit(1);
+
+            }
+        });
+    }
+
+    //    Khai bao ham chua tat ca cac event
+    private void event() {
+        this.keyboardEvent();
+        this.windowEvent();
+    }
+
+
+    public void gameLoop() {
+
+        while (true) {
+
             long currentTime = System.nanoTime(); // So mili giay tinh tu 0h 0p 0s ngay 01/01 nam 1970 den gio - Unix Time
-//            Kiem tra xem thoi gian co dung vs dieu kien hay k
-            if(currentTime - lastTime >= 17000000){
-                this.gameCanvas.positionXStar -=2;
+//
+//      Kiem tra xem thoi gian co dung vs dieu kien hay k
 
-                this.gameCanvas.positionXEnemy +=3;
+            if (currentTime - lastTime >= 17000000) {
 
+//                Goi ham di chuyen
+                this.gameCanvas.runAll();
+
+//                In tat ca cac nhan vat ra
                 this.gameCanvas.renderAll();
+
 //                this.gameCanvas.repaint();
+
+//                Lay thoi gian
                 this.lastTime = currentTime;
             }
 
