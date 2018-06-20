@@ -10,10 +10,6 @@ import java.util.Random;
 
 public class GameCanvas extends JPanel {
 
-    BufferedImage enemyImage;
-    BufferedImage playerImage;
-
-
     //    BackBuffered
 // 1. Cai ma ban se thay
 //    2. Cai ma dang sau duoc tinh toan de hien thi
@@ -31,12 +27,12 @@ public class GameCanvas extends JPanel {
 //    Khai bao 1 ngoi sao
 //    Star star;
 
-    int positionXEnemy = 0;
-    int positionYEnemy = 200;
+    Enemy enemy;
 
-    int positionXPlayer = 512;
-    int positionYPlayer = 300;
+//    int positionXPlayer = 512;
+//    int positionYPlayer = 300;
 
+    Player player;
 
 
 //    Camelcase: starImage
@@ -77,12 +73,25 @@ public class GameCanvas extends JPanel {
 //        Tai sao lai nhu the nay ?
 //        Boi cos the se crash neu nhu khong co anh hoac anh bi thay the try catch de nam dc loi cua cong viec caan kiem tra
 
-        this.enemyImage = this.loadImage("resources/images/circle.png");
 
-        this.playerImage = this.loadImage("resources/images/circle.png");
+
+        this.setupPlayer();
+
+        this.setupEnemy();
 
 //        Goi ham setup Star
         this.setupStar();
+    }
+
+//    Setup Enemy
+    private void setupEnemy(){
+        this.enemy = new Enemy(
+                this.loadImage("resources/images/circle.png"),
+                this.random.nextInt(1024),
+                this.random.nextInt(600),
+                10,10,0,0
+        );
+
     }
 
     //    Setup one Star
@@ -97,6 +106,19 @@ public class GameCanvas extends JPanel {
 //                5,
 //                -3,
 //                0);
+    }
+
+    private void setupPlayer() {
+//        Khoi tao doi tuong Player
+        this.player = new Player(
+                this.loadImage("resources/images/circle.png"),
+                this.random.nextInt(1024),
+                this.random.nextInt(600),
+                20,
+                20,
+                0,
+                0
+        );
     }
 
     @Override
@@ -126,6 +148,7 @@ public class GameCanvas extends JPanel {
 //        Goi ham render character
         this.renderCharacter();
 
+
 //         Ve lai
         this.repaint();
     }
@@ -137,9 +160,11 @@ public class GameCanvas extends JPanel {
 //        Duyet phan tu star trong mang da khai bao ben tren
         this.stars.forEach(star -> star.render(graphics));
 
-        this.graphics.drawImage(this.enemyImage, positionXEnemy, positionYEnemy, 10, 10, null);
+//        this.graphics.drawImage(this.enemyImage, positionXEnemy, positionYEnemy, 10, 10, null);
+        this.enemy.render(graphics);
 
-        this.graphics.drawImage(this.playerImage, positionXPlayer, positionYPlayer, 20, 20, null);
+//        this.graphics.drawImage(this.playerImage, positionXPlayer, positionYPlayer, 20, 20, null);
+        this.player.render(graphics);
     }
 
 //    Khai bao ham render backgroung
@@ -159,14 +184,14 @@ public class GameCanvas extends JPanel {
 //        this.star.run();
         this.createStar();
         this.stars.forEach(star -> star.run());
-
-        this.positionXEnemy += 2;
+        this.player.run();
+        this.enemy.x += 2;
     }
 
     private void createStar() {
 
 //        Dieu kien iff nay de delay thoi gian va control so luong ngoi sao dc in ra
-        if (this.countStar == 2){
+        if (this.countStar == 2) {
 //        Tao ngau nhien star
             Star star = new Star(
                     this.loadImage("resources/images/star.png"),
@@ -179,9 +204,9 @@ public class GameCanvas extends JPanel {
             );
 //        Sau khi tao xong dua vao list
             this.stars.add(star);
-            this.countStar =0;
+            this.countStar = 0;
         } else {
-            this.countStar +=1;
+            this.countStar += 1;
         }
     }
 
