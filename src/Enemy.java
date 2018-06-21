@@ -26,6 +26,24 @@ public class Enemy {
         this.y += this.velocityy;
     }
 
+//    public  void comeback(){
+//
+//        if(this.x <= 1024){
+//            this.x -= this.velocityx;
+//        }
+//        if (this.x >=0){
+//            this.x += this.velocityx;
+//        }
+//
+//        if(this.y >= 0){
+//            this.y += this.velocityy;
+//        }
+//
+//        if(this.y <= 600){
+//            this.y -= this.velocityy;
+//        }
+//    }
+
 
 
     public void render(Graphics graphics) {

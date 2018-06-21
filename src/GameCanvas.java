@@ -89,10 +89,11 @@ public class GameCanvas extends JPanel {
                 this.loadImage("resources/images/circle.png"),
                 this.random.nextInt(1024),
                 this.random.nextInt(600),
-                10,10,0,0
+                10,10,4,2
         );
-
     }
+
+
 
     //    Setup one Star
     private void setupStar() {
@@ -185,8 +186,9 @@ public class GameCanvas extends JPanel {
         this.createStar();
         this.stars.forEach(star -> star.run());
         this.player.run();
-        this.enemy.x += 2;
+        this.enemy.run();
     }
+
 
     private void createStar() {
 
