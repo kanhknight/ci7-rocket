@@ -99,6 +99,11 @@ public class GameWindow extends JFrame {
 
     public void gameLoop() {
 
+////        Ve 5 enemy
+//        for (int i = 0; i < 5; i++) {
+//            this.gameCanvas.createEnemy();
+//        }
+
         while (true) {
 
             long currentTime = System.nanoTime(); // So mili giay tinh tu 0h 0p 0s ngay 01/01 nam 1970 den gio - Unix Time

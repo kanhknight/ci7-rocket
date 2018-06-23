@@ -22,17 +22,21 @@ public class GameCanvas extends JPanel {
     //    Khai bao mang de quan ly viec ve ra nhieu ngoi sao
     List<Star> stars;
 
+    //    Khai bao mang de quan ly viec tao ra nhieu enemy
+    List<Enemy> enemy;
+
     private Random random = new Random();
     private int countStar = 0;
 //    Khai bao 1 ngoi sao
 //    Star star;
 
-    Enemy enemy;
+//    Enemy enemy;
 
 //    int positionXPlayer = 512;
 //    int positionYPlayer = 300;
-
     Player player;
+
+    Background background;
 
 
 //    Camelcase: starImage
@@ -44,6 +48,9 @@ public class GameCanvas extends JPanel {
 
 //        Khai bao kich thuoc giay ve bang voi cua so
         this.setSize(1024, 600);
+
+//        Khai bao background
+        this.setupBackGround();
 
 //        Khai bao nhan vat
         this.setupCharacter();
@@ -73,7 +80,7 @@ public class GameCanvas extends JPanel {
 //        Tai sao lai nhu the nay ?
 //        Boi cos the se crash neu nhu khong co anh hoac anh bi thay the try catch de nam dc loi cua cong viec caan kiem tra
 
-
+        this.setupBackGround();
 
         this.setupPlayer();
 
@@ -83,16 +90,22 @@ public class GameCanvas extends JPanel {
         this.setupStar();
     }
 
-//    Setup Enemy
-    private void setupEnemy(){
-        this.enemy = new Enemy(
-                this.loadImage("resources/images/circle.png"),
-                this.random.nextInt(1024),
-                this.random.nextInt(600),
-                10,10,4,2
-        );
+//    Setup Background
+    private void setupBackGround(){
+        this.background = new Background(0,0,1024,600, Color.BLACK);
     }
 
+
+    //    Setup Enemy
+    private void setupEnemy() {
+//        this.enemy = new Enemy(
+//                this.loadImage("resources/images/circle.png"),
+//                this.random.nextInt(1024),
+//                this.random.nextInt(600),
+//                10, 10, 3, -2
+//        );
+        this.enemy = new ArrayList<>();
+    }
 
 
     //    Setup one Star
@@ -113,8 +126,8 @@ public class GameCanvas extends JPanel {
 //        Khoi tao doi tuong Player
         this.player = new Player(
                 this.loadImage("resources/images/circle.png"),
-                this.random.nextInt(1024),
-                this.random.nextInt(600),
+                this.random.nextInt(1004),
+                this.random.nextInt(558),
                 20,
                 20,
                 0,
@@ -143,9 +156,6 @@ public class GameCanvas extends JPanel {
     //    Ham in tat ca
     public void renderAll() {
 
-        // Goi ham renderbackground
-        this.renderBackground();
-
 //        Goi ham render character
         this.renderCharacter();
 
@@ -157,12 +167,17 @@ public class GameCanvas extends JPanel {
     //    Khai bao ham in ra nhan vat
     private void renderCharacter() {
 
+//        Render background
+        this.background.render(graphics);
+
 //        this.star.render(this.graphics);
 //        Duyet phan tu star trong mang da khai bao ben tren
         this.stars.forEach(star -> star.render(graphics));
 
 //        this.graphics.drawImage(this.enemyImage, positionXEnemy, positionYEnemy, 10, 10, null);
-        this.enemy.render(graphics);
+//        this.enemy.render(graphics);
+
+        this.enemy.forEach(enemy -> enemy.render(graphics));
 
 //        this.graphics.drawImage(this.playerImage, positionXPlayer, positionYPlayer, 20, 20, null);
         this.player.render(graphics);
@@ -170,12 +185,12 @@ public class GameCanvas extends JPanel {
 
 //    Khai bao ham render backgroung
 
-    private void renderBackground() {
-
-        this.graphics.setColor(Color.BLACK);
-
-        this.graphics.fillRect(0, 0, 1024, 600);
-    }
+//    private void renderBackground() {
+//
+//        this.graphics.setColor(Color.BLACK);
+//
+//        this.graphics.fillRect(0, 0, 1024, 600);
+//    }
 
 //    Khai bao ham Run all
 
@@ -186,7 +201,26 @@ public class GameCanvas extends JPanel {
         this.createStar();
         this.stars.forEach(star -> star.run());
         this.player.run();
-        this.enemy.run();
+//        this.enemy.run();
+        this.createEnemy();
+        this.enemy.forEach(enemy -> enemy.run());
+    }
+
+
+    private void createEnemy() {
+        Enemy enemy = new Enemy(
+                this.loadImage("resources/images/circle.png"),
+                this.random.nextInt(1004),
+                this.random.nextInt(600),
+                10,
+                10,
+                3,
+                3
+        );
+
+        if (this.enemy.size() < 5) {
+            this.enemy.add(enemy);
+        }
     }
 
 
@@ -199,8 +233,6 @@ public class GameCanvas extends JPanel {
                     this.loadImage("resources/images/star.png"),
                     1024,
                     this.random.nextInt(800),
-                    5,
-                    5,
                     -(this.random.nextInt(8) - 1),
                     0
             );

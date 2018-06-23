@@ -21,9 +21,13 @@ public class Enemy {
         this.velocityy = velocityy;
     }
 
-    public void run(){
+    public void run() {
         this.x += this.velocityx;
         this.y += this.velocityy;
+        if (this.x < 0 || this.x > 1014)
+            this.velocityx = -this.velocityx;
+        if (this.y < 0 || this.y > 575)
+            this.velocityy = -this.velocityy;
     }
 
 //    public  void comeback(){
@@ -43,7 +47,6 @@ public class Enemy {
 //            this.y -= this.velocityy;
 //        }
 //    }
-
 
 
     public void render(Graphics graphics) {

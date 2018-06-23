@@ -36,24 +36,24 @@ public class Player {
     }
 
     public void run() {
-        if (this.x > 1024) {
+        if (this.x > 1004) {
             this.x = 0;
-            this.y = this.random.nextInt(600);
+            this.y = this.random.nextInt(558);
         }
 
         if (this.x < 0) {
-            this.x = 1024;
-            this.y = this.random.nextInt(600);
+            this.x = 1004;
+            this.y = this.random.nextInt(558);
         }
 
-        if (this.y > 600) {
-            this.x = this.random.nextInt(1024);
+        if (this.y > 558) {
+            this.x = this.random.nextInt(1004);
             this.y = 0;
         }
 
         if (this.y < 0) {
-            this.x = this.random.nextInt(1024);
-            this.y = 600;
+            this.x = this.random.nextInt(1004);
+            this.y = 558;
         }
     }
 
