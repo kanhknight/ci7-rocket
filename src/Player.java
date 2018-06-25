@@ -1,61 +1,53 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Player {
+    public Vector2D position;
+    private List<Vector2D> vertices;
+    private Polygon polygon;
+    public Vector2D velocity;
+    public double angle = 0.0;
 
-    public BufferedImage image;
-    public int x;
-    public int y;
-    public int width;
-    public int height;
-    public int velocityx;
-    public int velocityy;
+    public Player() {
 
-    private Random random;
+        this.position = new Vector2D();
+        this.vertices = Arrays.asList(
+                new Vector2D(),
+                new Vector2D(0, 16),
+                new Vector2D(20, 8)
+        );
+        this.polygon = new Polygon();
+        this.velocity = new Vector2D(3.5f,0);
+    }
 
-    public Player(BufferedImage image, int x, int y, int width, int height, int velocityx, int velocityy) {
-        this.image = image;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.velocityx = velocityx;
-        this.velocityy = velocityy;
-        this.random = new Random();
+    public void run(){
+        this.position.addUp(this.velocity);
+
     }
 
     public void render(Graphics graphics) {
-        graphics.drawImage(
-                this.image,
-                this.x,
-                this.y,
-                this.width,
-                this.height, null
-        );
+        this.polygon.reset();
+
+        Vector2D center = this.vertices
+                .stream()
+                .reduce(new Vector2D(), (v1, v2) -> v1.add(v2))
+                .multiply(1/ this.vertices.size())
+                .rotate(this.angle);
+
+        Vector2D translation = this.position.subtract(center);
+
+//        List<Vector2D> list = new ArrayList<>();
+//        this.vertices.forEach(vertex -> list.add(vertex.add(translation)));
+
+        this.vertices.stream()
+                .map(vertex ->vertex.rotate(angle))
+                .map(vertex -> vertex.add(translation))
+                .forEach(vertex -> polygon.addPoint((int) vertex.x, (int) vertex.y));
+        graphics.setColor(Color.RED);
+        graphics.fillPolygon(this.polygon);
+
     }
-
-    public void run() {
-        if (this.x > 1004) {
-            this.x = 0;
-            this.y = this.random.nextInt(558);
-        }
-
-        if (this.x < 0) {
-            this.x = 1004;
-            this.y = this.random.nextInt(558);
-        }
-
-        if (this.y > 558) {
-            this.x = this.random.nextInt(1004);
-            this.y = 0;
-        }
-
-        if (this.y < 0) {
-            this.x = this.random.nextInt(1004);
-            this.y = 558;
-        }
-    }
-
-
 }

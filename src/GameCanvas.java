@@ -10,251 +10,102 @@ import java.util.Random;
 
 public class GameCanvas extends JPanel {
 
-    //    BackBuffered
-// 1. Cai ma ban se thay
-//    2. Cai ma dang sau duoc tinh toan de hien thi
-//    Co che lat anh nhu viec ban ve 1 hinh lien tuc leen cac trang cua quyen sach roi sau do lat hinh lien tuc
     BufferedImage backBuffered;
-
-    //   Khai Bao But ve Graphics, but ve nay la cua backbuffered nhe' chung ta se dung but ve nay de ve
     Graphics graphics;
 
-    //    Khai bao mang de quan ly viec ve ra nhieu ngoi sao
+    int countStar = 0;
+
     List<Star> stars;
-
-    //    Khai bao mang de quan ly viec tao ra nhieu enemy
-    List<Enemy> enemy;
-
-    private Random random = new Random();
-    private int countStar = 0;
-//    Khai bao 1 ngoi sao
-//    Star star;
-
-//    Enemy enemy;
-
-//    int positionXPlayer = 512;
-//    int positionYPlayer = 300;
-    Player player;
 
     Background background;
 
+    public Player player = new Player();
+    public Enemy enemy = new Enemy();
 
-//    Camelcase: starImage
-//    snakecase: star_image
-//    windowcase: StarImage
+    private Random random = new Random();
 
-    //    Khai báo giấy vẽ
+
     public GameCanvas() {
-
-//        Khai bao kich thuoc giay ve bang voi cua so
         this.setSize(1024, 600);
 
-//        Khai bao background
-        this.setupBackGround();
+        this.setupBackBuffered();
 
-//        Khai bao nhan vat
         this.setupCharacter();
 
-//        goi ham setup backbufferred
-        this.setupBackBufferred();
-
-//      Hien giay ve len
         this.setVisible(true);
-
     }
 
-    //    Khai bao ham cai dat BackBufferred
-    private void setupBackBufferred() {
-
-//        Chung ta can co khung ma buffered va dinh dang he mau cho anh se ve len backbuffered
+    private void setupBackBuffered() {
         this.backBuffered = new BufferedImage(1024, 600, BufferedImage.TYPE_4BYTE_ABGR);
-
-//        Lay but ve cua backbuffered de dua vao graphics
         this.graphics = this.backBuffered.getGraphics();
     }
 
-    //    Ham khai bao setup nhan vat
     private void setupCharacter() {
-
-//        Load Hinh Anh
-//        Tai sao lai nhu the nay ?
-//        Boi cos the se crash neu nhu khong co anh hoac anh bi thay the try catch de nam dc loi cua cong viec caan kiem tra
-
-        this.setupBackGround();
-
-        this.setupPlayer();
-
-        this.setupEnemy();
-
-//        Goi ham setup Star
-        this.setupStar();
-    }
-
-//    Setup Background
-    private void setupBackGround(){
-        this.background = new Background(0,0,1024,600, Color.BLACK);
-    }
-
-
-    //    Setup Enemy
-    private void setupEnemy() {
-//        this.enemy = new Enemy(
-//                this.loadImage("resources/images/circle.png"),
-//                this.random.nextInt(1024),
-//                this.random.nextInt(600),
-//                10, 10, 3, -2
-//        );
-        this.enemy = new ArrayList<>();
-    }
-
-
-    //    Setup one Star
-    private void setupStar() {
-//        Khoi tao doi tuong star
+        this.background = new Background();
         this.stars = new ArrayList<>();
-//        this.star = new Star(
-//                this.loadImage("resources/images/star.png"),
-//                1024,
-//                300,
-//                5,
-//                5,
-//                -3,
-//                0);
+        this.setupPlayer();
+        this.setupEnemy();
     }
 
     private void setupPlayer() {
-//        Khoi tao doi tuong Player
-        this.player = new Player(
-                this.loadImage("resources/images/circle.png"),
-                this.random.nextInt(1004),
-                this.random.nextInt(558),
-                20,
-                20,
-                0,
-                0
-        );
+        this.player.position.set(100, 200);
+    }
+
+    private void setupEnemy() {
+        this.enemy.position.set(800, 400);
+        this.enemy.image = this.loadImage("resources/images/circle.png");
     }
 
     @Override
-//    Bat dau khai bao but ve
     protected void paintComponent(Graphics g) {
-//        Ve background
-//        g.setColor(Color.BLACK);
-//        g.fillRect(0,0,1024,600);
-//        g.drawImage(this.starImage, positionXStar, positionYStar, 40,40, null);
-//        g.drawImage(this.enemyImage, positionXEnemy, positionYEnemy, 10,10,null);
-//        g.drawImage(this.playerImage, positionXPlayer, positionYPlayer, 10, 10, null);
-//        Mat nguoi co the nhin thay 60 Frame / Giay
-//        Chung ta dang de khug hinh chay qua nhanh nen k the nhin thay.
-        // Bay gio ta se set 1s ve 60 hinh de co the nhin thay
-//         Moi hih xuat hien sap xi trong 0,017s
-//        Vay cu 0.017 mu 9 ve 1 hinh
-//        Lat to giay len
         g.drawImage(this.backBuffered, 0, 0, null);
     }
 
-    //    Ham in tat ca
     public void renderAll() {
+        this.background.render(this.graphics);
+        this.stars.forEach(star -> star.render(graphics));
+        this.player.render(this.graphics);
+        this.enemy.render(this.graphics);
 
-//        Goi ham render character
-        this.renderCharacter();
-
-
-//         Ve lai
         this.repaint();
     }
 
-    //    Khai bao ham in ra nhan vat
-    private void renderCharacter() {
-
-//        Render background
-        this.background.render(graphics);
-
-//        this.star.render(this.graphics);
-//        Duyet phan tu star trong mang da khai bao ben tren
-        this.stars.forEach(star -> star.render(graphics));
-
-//        this.graphics.drawImage(this.enemyImage, positionXEnemy, positionYEnemy, 10, 10, null);
-//        this.enemy.render(graphics);
-
-        this.enemy.forEach(enemy -> enemy.render(graphics));
-
-//        this.graphics.drawImage(this.playerImage, positionXPlayer, positionYPlayer, 20, 20, null);
-        this.player.render(graphics);
-    }
-
-//    Khai bao ham render backgroung
-
-//    private void renderBackground() {
-//
-//        this.graphics.setColor(Color.BLACK);
-//
-//        this.graphics.fillRect(0, 0, 1024, 600);
-//    }
-
-//    Khai bao ham Run all
-
     public void runAll() {
-
-//        Goi ham run cua star
-//        this.star.run();
         this.createStar();
         this.stars.forEach(star -> star.run());
+        this.runEnemy();
         this.player.run();
-//        this.enemy.run();
-        this.createEnemy();
-        this.enemy.forEach(enemy -> enemy.run());
     }
-
-
-    private void createEnemy() {
-        Enemy enemy = new Enemy(
-                this.loadImage("resources/images/circle.png"),
-                this.random.nextInt(1004),
-                this.random.nextInt(600),
-                10,
-                10,
-                3,
-                3
-        );
-
-        if (this.enemy.size() < 5) {
-            this.enemy.add(enemy);
-        }
-    }
-
 
     private void createStar() {
+        if (this.countStar == 5) {
 
-//        Dieu kien iff nay de delay thoi gian va control so luong ngoi sao dc in ra
-        if (this.countStar == 2) {
-//        Tao ngau nhien star
-            Star star = new Star(
-                    this.loadImage("resources/images/star.png"),
-                    1024,
-                    this.random.nextInt(800),
-                    -(this.random.nextInt(8) - 1),
-                    0
-            );
-//        Sau khi tao xong dua vao list
+            Star star = new Star();
+
+            star.position.set(1024, this.random.nextInt(600));
+            star.velocity.set(-(random.nextInt(5) + 1), 0);
+            star.image = this.loadImage("resources/images/star.png");
             this.stars.add(star);
+
             this.countStar = 0;
         } else {
             this.countStar += 1;
         }
     }
 
-    //    Khai bao ham load Image
+    private void runEnemy() {
+        Vector2D velocity = this.player.position
+                .subtract(this.enemy.position)
+                .normalize()
+                .multiply(1.5f);
+        this.enemy.velocity.set(velocity);
+        this.enemy.run();
+    }
+
     private BufferedImage loadImage(String path) {
-
         try {
-
             return ImageIO.read(new File(path));
-
         } catch (IOException e) {
-
-            e.printStackTrace();
-
             return null;
         }
     }
