@@ -17,6 +17,8 @@ public class GameCanvas extends JPanel {
 
     List<Star> stars;
 
+    List<BulletEnemy> bulletEnemies;
+
     Background background;
 
     public Player player = new Player();
@@ -43,6 +45,7 @@ public class GameCanvas extends JPanel {
     private void setupCharacter() {
         this.background = new Background();
         this.stars = new ArrayList<>();
+        this.bulletEnemies = new ArrayList<>();
         this.setupPlayer();
         this.setupEnemy();
     }
@@ -66,7 +69,7 @@ public class GameCanvas extends JPanel {
         this.stars.forEach(star -> star.render(graphics));
         this.player.render(this.graphics);
         this.enemy.render(this.graphics);
-
+        this.bulletEnemies.forEach(bulletEnemy -> bulletEnemy.render(graphics));
         this.repaint();
     }
 
@@ -74,14 +77,25 @@ public class GameCanvas extends JPanel {
         this.createStar();
         this.stars.forEach(star -> star.run());
         this.runEnemy();
+        this.enemyShoot(this.enemy);
+        this.bulletEnemies.forEach(bulletEnemy -> bulletEnemy.run());
         this.player.run();
     }
 
+
+    private void enemyShoot(Enemy enemy){
+        BulletEnemy bulletEnemy = new BulletEnemy();
+        bulletEnemy.position.set(this.enemy.position);
+        bulletEnemy.velocity.set(random.nextInt(10),random.nextInt(20));
+        bulletEnemy.image = this.loadImage("resources/images/circle.png");
+        this.bulletEnemies.add(bulletEnemy);
+    }
+
+
     private void createStar() {
-        if (this.countStar == 5) {
+        if (this.countStar == 3) {
 
             Star star = new Star();
-
             star.position.set(1024, this.random.nextInt(600));
             star.velocity.set(-(random.nextInt(5) + 1), 0);
             star.image = this.loadImage("resources/images/star.png");
@@ -97,7 +111,7 @@ public class GameCanvas extends JPanel {
         Vector2D velocity = this.player.position
                 .subtract(this.enemy.position)
                 .normalize()
-                .multiply(1.5f);
+                .multiply(2.5f);
         this.enemy.velocity.set(velocity);
         this.enemy.run();
     }

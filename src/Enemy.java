@@ -14,9 +14,12 @@ public class Enemy {
 
     public void run() {
         this.position.addUp(this.velocity);
+//        this.enemyShoot.run(this);
+
     }
 
     public void render(Graphics graphics) {
         graphics.drawImage(this.image, (int)this.position.x, (int)this.position.y, 20, 20, null);
+
     }
 }
