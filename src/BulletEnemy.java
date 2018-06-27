@@ -13,7 +13,9 @@ public class BulletEnemy {
     }
 
     public void run() {
+
         this.position.addUp(this.velocity);
+
     }
 
     public void render(Graphics graphics) {
